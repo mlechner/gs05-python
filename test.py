@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-from record import Record
+# -*- coding: utf-8 -*-
+
+from Record import Record
 
 
 # read example file

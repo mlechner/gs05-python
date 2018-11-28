@@ -1,4 +1,4 @@
-
+# -*- coding: utf-8 -*-
 
 class Record:
     def __init__(self, recordstring):
