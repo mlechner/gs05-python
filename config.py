@@ -14,7 +14,7 @@ ser = serial.Serial(
 )
 
 while 1:
-    time.sleep(10)
+    time.sleep(60)
     ser.write(b'D')
     line1 = ser.readline()
     line2 = ser.readline()
@@ -30,3 +30,4 @@ while 1:
     else:
         print("lines differ!")
         continue
+
