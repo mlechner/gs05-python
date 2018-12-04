@@ -2,6 +2,7 @@
 
 import time
 import serial
+from Record import Record
 
 ser = serial.Serial(
     "/dev/ttyAMA0",
@@ -14,5 +15,13 @@ ser = serial.Serial(
 
 while 1:
     ser.write(b'D')
-    print(ser.read(256))
+    line = ser.readline()
+    print(line)
+    try:
+        myrecord = Record(line)
+        for key in myrecord.data.keys():
+            print(key, myrecord.data[key])
+    except:
+        print("An error occured.")
+
     time.sleep(10)
