@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from bitstring import BitStream
-
 class Record:
     def __init__(self, recordstring):
         self.record_string = recordstring
