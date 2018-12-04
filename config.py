@@ -24,4 +24,4 @@ while 1:
     except:
         print("An error occured.")
 
-    time.sleep(10)
+    time.sleep(60)
