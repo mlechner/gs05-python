@@ -14,7 +14,7 @@ ser = serial.Serial(
 )
 
 while 1:
-    time.sleep(60)
+    time.sleep(10)
     ser.write(b'D')
     line1 = ser.readline()
     line2 = ser.readline()
@@ -22,7 +22,7 @@ while 1:
     print(line1, line2, line3)
     if (line1 == line2 == line3):
         try:
-            myrecord = Record(line)
+            myrecord = Record(line1)
             for key in myrecord.data.keys():
                 print(key, myrecord.data[key])
         except:
