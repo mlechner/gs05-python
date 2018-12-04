@@ -14,14 +14,19 @@ ser = serial.Serial(
 )
 
 while 1:
-    ser.write(b'D')
-    line = ser.readline()
-    print(line)
-    try:
-        myrecord = Record(line)
-        for key in myrecord.data.keys():
-            print(key, myrecord.data[key])
-    except:
-        print("An error occured.")
-
     time.sleep(10)
+    ser.write(b'D')
+    line1 = ser.readline()
+    line2 = ser.readline()
+    line3 = ser.readline()
+    print(line1, line2, line3)
+    if (line1 == line2 == line3):
+        try:
+            myrecord = Record(line)
+            for key in myrecord.data.keys():
+                print(key, myrecord.data[key])
+        except:
+            print("An error occured.")
+    else:
+        print("lines differ!")
+        continue
