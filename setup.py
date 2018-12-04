@@ -27,8 +27,7 @@ setup(name='gs05.base',
           # -*- Extra requirements: -*-
           'setuptools',
           'RPi.GPIO',
-          'serial',
-          'bitstring'
+          'serial'
       ],
       ##code-section entrypoints      
       entry_points="""
