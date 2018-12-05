@@ -12,6 +12,8 @@ waittime=60
 repeat=3
 
 [db]
+driver=sqlite
+sqlite=sqlite:///records.sqlite
 host=localhost
 port=5432
 database=gs05

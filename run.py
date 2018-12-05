@@ -6,7 +6,7 @@ import serial
 from Record import Record
 from Config import Config
 from schema import records
-from schema import engine, pgengine
+from schema import get_dbengine
 
 
 class GS05App:
@@ -50,9 +50,7 @@ class GS05App:
                         origstring=myrecord.record_string,
                         created=datetime.datetime.now()
                     )
-                    conn = engine.connect()
-                    conn.execute(ins)
-                    conn = pgengine.connect()
+                    conn = get_dbengine().connect()
                     conn.execute(ins)
                 except:
                     print("An error occured.")

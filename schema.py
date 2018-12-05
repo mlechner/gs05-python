@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import (create_engine, Table, Column, Integer, Boolean, Float, String, DateTime, MetaData)
-from Config import Config
+from sqlalchemy import (Table, Column, Integer, Boolean, Float, String, DateTime, MetaData)
+from db import get_dbengine
 
-engine = create_engine("sqlite:///records.sqlite")
-pgconfig=Config().get_config()['db']
-pgengine = create_engine('postgresql://' + pgconfig['user'] + ':'
-                         + pgconfig['pass'] + '@' + pgconfig['host']
-                         + '/' + pgconfig['database'])
+engine = get_dbengine()
 
 meta = MetaData()
 records = Table(
@@ -24,4 +20,3 @@ records = Table(
     Column('created', DateTime),
 )
 records.create(engine, checkfirst=True)
-records.create(pgengine)

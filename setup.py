@@ -28,7 +28,7 @@ setup(name='gs05.base',
           'setuptools',
           'pyserial',
           'SQLAlchemy',
-          'psycopg2'
+          'psycopg2-binary'
       ],
       ##code-section entrypoints      
       entry_points="""
