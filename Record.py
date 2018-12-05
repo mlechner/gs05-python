@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 class Record:
     def __init__(self, recordstring):
         self.record_string = recordstring
@@ -23,6 +24,3 @@ class Record:
             "highvoltage": bool(int(split_data["S"])),
             "temperature": temperature
         }
-
-    def get_lowdose_from_recordstring(self):
-        self.record_string.split(" ")[0].split(":")
