@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from setuptools import setup, find_packages
-import sys, os
 
 version = '0.0.1.dev0'
 
@@ -20,14 +19,13 @@ setup(name='gs05.base',
       url='http://www.bfs.de',
       license='GPL',
       packages=find_packages(exclude=['ez_setup']),
-      #namespace_packages=['gs05'],
       include_package_data=True,
       zip_safe=True,
       install_requires=[
           # -*- Extra requirements: -*-
+          'configparser',
           'setuptools',
-          'RPi.GPIO',
-          'serial'
+          'pyserial'
       ],
       ##code-section entrypoints      
       entry_points="""
