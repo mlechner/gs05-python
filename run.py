@@ -46,7 +46,9 @@ class GS05App:
                         echo=myrecord.data.get('echo'),
                         coincidence=myrecord.data.get('coincidence'),
                         highvoltage=myrecord.data.get('highvoltage'),
-                        temperature=myrecord.data.get('temperature')
+                        temperature=myrecord.data.get('temperature'),
+                        origstring=myrecord.record_string,
+                        created=datetime.datetime.now()
                     )
                     conn = engine.connect()
                     conn.execute(ins)
