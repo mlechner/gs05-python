@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
 
+import sys
+sys.path.append("./lcd_I2C/lib/")
+
 import time
 import datetime
 import serial
+import lcddriver
+
 from Record import Record
 from Config import Config
 from schema import records
 from schema import get_dbengine
-
 
 class GS05App:
     def __init__(self, *args, **kwargs):
@@ -15,6 +19,7 @@ class GS05App:
         self.serconf = self.config['serial']
         self.pollconf = self.config['polling']
         self.dbconf = self.config['db']
+        self.lcdconf = self.config['lcd']
         self.ser = serial.Serial(
             self.serconf['device'],
             baudrate=int(self.serconf['baudrate']),
@@ -22,12 +27,17 @@ class GS05App:
             parity=self.serconf['parity'],
             stopbits=int(self.serconf['stopbits']),
             timeout=int(self.serconf['timeout'])
-    )
+        )
+        # on initialise lcd
+        self.lcd = None
+        if self.lcdconf['lcd'] == 1:
+            self.lcd = lcddriver.lcd()
 
     def run(self):
         while 1:
             time.sleep(int(self.pollconf['waittime']))
-            print(datetime.datetime.now())
+            timestamp = datetime.datetime.now()
+            print(timestamp)
             self.ser.write(self.serconf['receivekey'].encode('ascii'))
             lines = []
             for i in range(int(self.pollconf['repeat'])):
@@ -39,7 +49,6 @@ class GS05App:
                     myrecord = Record(lines[0])
                     for key in myrecord.data.keys():
                         print(key, myrecord.data[key])
-                    # FIXME save record to Database
                     ins = records.insert().values(
                         lowdose=myrecord.data.get('lowdose'),
                         highdose=myrecord.data.get('highdose'),
@@ -48,12 +57,19 @@ class GS05App:
                         highvoltage=myrecord.data.get('highvoltage'),
                         temperature=myrecord.data.get('temperature'),
                         origstring=myrecord.record_string,
-                        created=datetime.datetime.now()
+                        created=timestamp
                     )
                     conn = get_dbengine().connect()
                     conn.execute(ins)
                 except:
                     print("An error occured.")
+                if self.lcd:
+                    try:
+                        lcd.lcd_clear()
+                        lcd.lcd_display_string(timestamp, 1)
+                        lcd.lcd_display_string("low %s | high %s" %(myrecord.data.get['lowdose'], myrecord.data.get['highdose']), 2)
+                    except:
+                        print("Could not write to LCD.")
             else:
                 print("lines differ or no lines fetched!")
                 continue
