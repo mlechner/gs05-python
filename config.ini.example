@@ -7,6 +7,9 @@ stopbits=1
 timeout=1
 receivekey=D
 
+[lcd]
+lcd=1
+
 [polling]
 waittime=60
 repeat=3
