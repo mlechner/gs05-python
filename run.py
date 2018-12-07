@@ -66,11 +66,8 @@ class GS05App:
                 if self.lcd:
                     try:
                         self.lcd.lcd_clear()
-                        self.lcd.lcd_display_string(now.strftime("%Y-%M-%d %H:%m"), 1)
-                        self.lcd.lcd_display_string(
-                            "ld %(ld)s | hd %(hd)s" % ({"ld": myrecord.data.get['lowdose'], "hd": myrecord.data.get['highdose']}),
-                            2
-                        )
+                        self.lcd.lcd_display_string(now.strftime("%d.%m.%y %H:%M"), 1)
+                        self.lcd.lcd_display_string("ld %(ld)s | hd %(hd)s" %({"ld": myrecord.data.get['lowdose'], "hd": myrecord.data.get['highdose']}), 2)
                     except:
                         print("Could not write to LCD.")
             else:
