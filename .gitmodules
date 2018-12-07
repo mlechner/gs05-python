@@ -1,0 +1,3 @@
+[submodule "lcd_I2C"]
+	path = lcd_I2C
+	url = https://github.com/mlechner/raspberry_lcd4x20_I2C.git
