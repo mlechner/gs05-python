@@ -65,9 +65,9 @@ class GS05App:
                     print("An error occured.")
                 if self.lcd:
                     try:
-                        lcd.lcd_clear()
-                        lcd.lcd_display_string(now.strftime("%Y-%M-%d %H:%m"), 1)
-                        lcd.lcd_display_string("low %s | high %s" %(myrecord.data.get['lowdose'], myrecord.data.get['highdose']), 2)
+                        self.lcd.lcd_clear()
+                        self.lcd.lcd_display_string(now.strftime("%Y-%M-%d %H:%m"), 1)
+                        self.lcd.lcd_display_string("low %s | high %s" %(myrecord.data.get['lowdose'], myrecord.data.get['highdose']), 2)
                     except:
                         print("Could not write to LCD.")
             else:
