@@ -30,14 +30,14 @@ class GS05App:
         )
         # on initialise lcd
         self.lcd = None
-        if self.lcdconf['lcd'] == 1:
+        if bool(self.lcdconf['lcd']):
             self.lcd = lcddriver.lcd()
 
     def run(self):
         while 1:
             time.sleep(int(self.pollconf['waittime']))
-            timestamp = datetime.datetime.now()
-            print(timestamp)
+            now = datetime.datetime.now()
+            print(now)
             self.ser.write(self.serconf['receivekey'].encode('ascii'))
             lines = []
             for i in range(int(self.pollconf['repeat'])):
@@ -57,7 +57,7 @@ class GS05App:
                         highvoltage=myrecord.data.get('highvoltage'),
                         temperature=myrecord.data.get('temperature'),
                         origstring=myrecord.record_string,
-                        created=timestamp
+                        created=now
                     )
                     conn = get_dbengine().connect()
                     conn.execute(ins)
@@ -66,7 +66,7 @@ class GS05App:
                 if self.lcd:
                     try:
                         lcd.lcd_clear()
-                        lcd.lcd_display_string(timestamp, 1)
+                        lcd.lcd_display_string(now.strftime("%Y-%M-%d %H:%m"), 1)
                         lcd.lcd_display_string("low %s | high %s" %(myrecord.data.get['lowdose'], myrecord.data.get['highdose']), 2)
                     except:
                         print("Could not write to LCD.")
