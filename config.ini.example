@@ -6,7 +6,7 @@ parity=N
 stopbits=1
 timeout=1
 receivekey=D
-deviceid=1234Q
+deviceid=1234T
 
 [lcd]
 lcd=1
