@@ -76,7 +76,7 @@ class GS05App:
                         if self.timeout:
                             self.lcd.lcd_display_string(now.strftime("%d.%m.%y %H:%M"), self.timeout)
                         if self.deviceid:
-                           self.lcd.lcd_display_string("%(id)s:%(ld)s|%(hd)s|%echo)s" %({
+                           self.lcd.lcd_display_string("%(id)s:%(ld)s|%(hd)s|%(echo)s" %({
                                 "id": self.deviceid,
                                 "ld": myrecord.data.get('lowdose'),
                                 "hd": myrecord.data.get('highdose'),
