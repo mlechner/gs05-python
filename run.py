@@ -30,8 +30,10 @@ class GS05App:
         )
         # on initialise lcd
         self.lcd = None
-        if bool(self.lcdconf['lcd']):
+        if bool('lcd' in self.lcdconf and self.lcdconf['lcd'] and self.lcdconf['lcd'] != '0'):
             self.lcd = lcddriver.lcd()
+        else:
+            print("no LCD found in config")
 
     def run(self):
         while 1:
