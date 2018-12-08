@@ -10,6 +10,7 @@ records = Table(
     'records',
     meta,
     Column('id', Integer, primary_key=True),
+    Column('deviceid', String),
     Column('lowdose', Integer),
     Column('highdose', Integer),
     Column('echo', Integer),

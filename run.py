@@ -20,6 +20,9 @@ class GS05App:
         self.pollconf = self.config['polling']
         self.dbconf = self.config['db']
         self.lcdconf = self.config['lcd']
+        self.deviceid = None
+        if 'deviceid' in self.serconf:
+            self.deviceid = self.serconf['deviceid']
         self.ser = serial.Serial(
             self.serconf['device'],
             baudrate=int(self.serconf['baudrate']),
@@ -52,6 +55,7 @@ class GS05App:
                     for key in myrecord.data.keys():
                         print(key, myrecord.data[key])
                     ins = records.insert().values(
+                        deviceid=self.deviceid,
                         lowdose=myrecord.data.get('lowdose'),
                         highdose=myrecord.data.get('highdose'),
                         echo=myrecord.data.get('echo'),
