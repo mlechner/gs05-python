@@ -11,6 +11,7 @@ deviceid=1234T
 [lcd]
 lcd=1
 valueout=2
+timestamp=1
 
 [polling]
 waittime=60

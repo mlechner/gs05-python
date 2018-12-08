@@ -21,10 +21,9 @@ class GS05App:
         self.pollconf = self.config['polling']
         self.dbconf = self.config['db']
         self.lcdconf = self.config['lcd']
-        self.deviceid = None
-        if 'deviceid' in self.serconf:
-            self.deviceid = self.serconf['deviceid']
+        self.deviceid = self.serconf['deviceid'] if 'deviceid' in self.serconf else None
         self.valueout = self.lcdconf['valueout'] if 'valueout' in self.lcdconf else 2
+        self.timeout = self.lcdconf['timestamp'] if 'timestamp' in self.lcdconf and bool(self.lcdconf['timestamp']) else False
         self.ser = serial.Serial(
             self.serconf['device'],
             baudrate=int(self.serconf['baudrate']),
@@ -74,9 +73,10 @@ class GS05App:
                 if self.lcd:
                     try:
                         self.lcd.lcd_clear()
-                        self.lcd.lcd_display_string(now.strftime("%d.%m.%y %H:%M"), 1)
+                        if self.timeout:
+                            self.lcd.lcd_display_string(now.strftime("%d.%m.%y %H:%M"), self.timeout)
                         if self.deviceid:
-                            self.lcd.lcd_display_string("%(id)s:%(ld)s|%(hd)s|%echo)s" %({
+                           self.lcd.lcd_display_string("%(id)s:%(ld)s|%(hd)s|%echo)s" %({
                                 "id": self.deviceid,
                                 "ld": myrecord.data.get('lowdose'),
                                 "hd": myrecord.data.get('highdose'),
