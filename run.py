@@ -24,6 +24,7 @@ class GS05App:
         self.deviceid = None
         if 'deviceid' in self.serconf:
             self.deviceid = self.serconf['deviceid']
+        self.valueout = self.lcdconf['valueout'] if 'valueout' in self.lcdconf else 2
         self.ser = serial.Serial(
             self.serconf['device'],
             baudrate=int(self.serconf['baudrate']),
@@ -74,7 +75,16 @@ class GS05App:
                     try:
                         self.lcd.lcd_clear()
                         self.lcd.lcd_display_string(now.strftime("%d.%m.%y %H:%M"), 1)
-                        self.lcd.lcd_display_string("ld %(ld)s | hd %(hd)s" %({"ld": myrecord.data.get('lowdose'), "hd": myrecord.data.get('highdose')}), 2)
+                        if self.deviceid:
+                            self.lcd.lcd_display_string("%(id)s:%(ld)s|%(hd)s|%echo)s" %({
+                                "id": self.deviceid,
+                                "ld": myrecord.data.get('lowdose'),
+                                "hd": myrecord.data.get('highdose'),
+                                "echo": myrecord.data.get('echo')}), self.valueout)
+                        else:
+                            self.lcd.lcd_display_string("ld %(ld)s | hd %(hd)s" %({
+                                "ld": myrecord.data.get('lowdose'),
+                                "hd": myrecord.data.get('highdose')}), self.valueout)
                     except:
                         print("Could not write to LCD.")
             else:
