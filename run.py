@@ -36,6 +36,7 @@ class GS05App:
         self.lcd = None
         if bool('lcd' in self.lcdconf and self.lcdconf['lcd'] and self.lcdconf['lcd'] != '0'):
             self.lcd = lcddriver.lcd()
+            self.lcd.lcd_clear()
         else:
             print("no LCD found in config")
 
@@ -72,7 +73,6 @@ class GS05App:
                     print("An error occured.")
                 if self.lcd:
                     try:
-                        self.lcd.lcd_clear()
                         if self.timeout:
                             self.lcd.lcd_display_string(now.strftime("%d.%m.%y %H:%M"), self.timeout)
                         if self.deviceid:
