@@ -22,8 +22,8 @@ class GS05App:
         self.dbconf = self.config['db']
         self.lcdconf = self.config['lcd']
         self.deviceid = self.serconf['deviceid'] if 'deviceid' in self.serconf else None
-        self.valueout = self.lcdconf['valueout'] if 'valueout' in self.lcdconf else 2
-        self.timeout = self.lcdconf['timestamp'] if 'timestamp' in self.lcdconf and bool(self.lcdconf['timestamp']) else False
+        self.valueout = int(self.lcdconf['valueout']) if 'valueout' in self.lcdconf else 2
+        self.timeout = int(self.lcdconf['timestamp']) if 'timestamp' in self.lcdconf and bool(self.lcdconf['timestamp']) else False
         self.ser = serial.Serial(
             self.serconf['device'],
             baudrate=int(self.serconf['baudrate']),
