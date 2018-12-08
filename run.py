@@ -9,6 +9,8 @@ import datetime
 import serial
 import lcddriver
 
+from lcddriver import LCD_RETURNHOME
+
 from Record import Record
 from Config import Config
 from schema import records
@@ -75,16 +77,18 @@ class GS05App:
                     try:
                         if self.timeout:
                             self.lcd.lcd_display_string(now.strftime("%d.%m.%y %H:%M"), self.timeout)
+                            self.lcd.lcd_write(LCD_RETURNHOME)
                         if self.deviceid:
                            self.lcd.lcd_display_string("%(id)s:%(ld)s|%(hd)s|%(echo)s" %({
                                 "id": self.deviceid,
                                 "ld": myrecord.data.get('lowdose'),
                                 "hd": myrecord.data.get('highdose'),
-                                "echo": myrecord.data.get('echo')}), self.valueout)
+                                "echo": myrecord.data.get('echo')}), self.valueout) 
                         else:
                             self.lcd.lcd_display_string("ld %(ld)s | hd %(hd)s" %({
                                 "ld": myrecord.data.get('lowdose'),
                                 "hd": myrecord.data.get('highdose')}), self.valueout)
+                        self.lcd.lcd_write(LCD_RETURNHOME)
                     except:
                         print("Could not write to LCD.")
             else:
