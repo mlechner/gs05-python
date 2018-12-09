@@ -76,18 +76,18 @@ class GS05App:
                 if self.lcd:
                     try:
                         if self.timeout:
-                            self.lcd.lcd_display_string(now.strftime("%d.%m.%y %H:%M"), self.timeout)
+                            self.lcd.lcd_display_string((now.strftime("%d.%m.%y %H:%M")).ljust(16), self.timeout)
                             self.lcd.lcd_write(LCD_RETURNHOME)
                         if self.deviceid:
-                           self.lcd.lcd_display_string("%(id)s:%(ld)s|%(hd)s|%(echo)s" %({
+                           self.lcd.lcd_display_string(("%(id)s:%(ld)s|%(hd)s|%(echo)s" %({
                                 "id": self.deviceid,
                                 "ld": myrecord.data.get('lowdose'),
                                 "hd": myrecord.data.get('highdose'),
-                                "echo": myrecord.data.get('echo')}), self.valueout) 
+                                "echo": myrecord.data.get('echo')})).ljust(16), self.valueout)
                         else:
-                            self.lcd.lcd_display_string("ld %(ld)s | hd %(hd)s" %({
+                            self.lcd.lcd_display_string(("ld %(ld)s | hd %(hd)s" %({
                                 "ld": myrecord.data.get('lowdose'),
-                                "hd": myrecord.data.get('highdose')}), self.valueout)
+                                "hd": myrecord.data.get('highdose')})).ljust(16), self.valueout)
                         self.lcd.lcd_write(LCD_RETURNHOME)
                     except:
                         print("Could not write to LCD.")
