@@ -2,19 +2,18 @@
 # -*- coding: utf-8 -*-
 
 import sys
-sys.path.append("./lcd_I2C/lib/")
-
 import time
 import datetime
 import serial
-import lcddriver
-
-from lcddriver import LCD_RETURNHOME
-
+from sqlalchemy.orm import sessionmaker
+from db import get_dbengine
 from Record import Record
 from Config import Config
-from schema import records
-from schema import get_dbengine
+sys.path.append("./lcd_I2C/lib/")
+import lcddriver
+from lcddriver import LCD_RETURNHOME
+
+Session = sessionmaker(bind=get_dbengine())
 
 class GS05App:
     def __init__(self, *args, **kwargs):
@@ -49,29 +48,22 @@ class GS05App:
             print(now)
             self.ser.write(self.serconf['receivekey'].encode('ascii'))
             lines = []
+
             for i in range(int(self.pollconf['repeat'])):
                 lines.append(self.ser.readline())
             print(lines)
             # check if all lines are equal
             if (len(lines) > 0) and (lines[1:] == lines[:-1]):
+                session = Session()
                 try:
-                    myrecord = Record(lines[0])
-                    for key in myrecord.data.keys():
-                        print(key, myrecord.data[key])
-                    ins = records.insert().values(
-                        deviceid=self.deviceid,
-                        lowdose=myrecord.data.get('lowdose'),
-                        highdose=myrecord.data.get('highdose'),
-                        echo=myrecord.data.get('echo'),
-                        coincidence=myrecord.data.get('coincidence'),
-                        highvoltage=myrecord.data.get('highvoltage'),
-                        temperature=myrecord.data.get('temperature'),
-                        origstring=myrecord.record_string,
-                        created=now
-                    )
-                    conn = get_dbengine().connect()
-                    conn.execute(ins)
+                    myrecord = Record()
+                    myrecord.set_data_from_recordstring(lines[0])
+                    myrecord.deviceid = self.deviceid
+                    myrecord.created = now
+                    session.add(myrecord)
+                    session.commit()
                 except:
+                    session.rollback()
                     print("An error occured.")
                 if self.lcd:
                     try:
@@ -80,14 +72,14 @@ class GS05App:
                             self.lcd.lcd_write(LCD_RETURNHOME)
                         if self.deviceid:
                            self.lcd.lcd_display_string(("%(id)s:%(ld)s|%(hd)s|%(echo)s" %({
-                                "id": self.deviceid,
-                                "ld": myrecord.data.get('lowdose'),
-                                "hd": myrecord.data.get('highdose'),
-                                "echo": myrecord.data.get('echo')})).ljust(16), self.valueout)
+                                "id": myrecord.deviceid,
+                                "ld": myrecord.lowdose,
+                                "hd": myrecord.highdose,
+                                "echo": myrecord.echo})).ljust(16), self.valueout)
                         else:
                             self.lcd.lcd_display_string(("ld %(ld)s | hd %(hd)s" %({
-                                "ld": myrecord.data.get('lowdose'),
-                                "hd": myrecord.data.get('highdose')})).ljust(16), self.valueout)
+                                "ld": myrecord.lowdose,
+                                "hd": myrecord.highdose})).ljust(16), self.valueout)
                         self.lcd.lcd_write(LCD_RETURNHOME)
                     except:
                         print("Could not write to LCD.")
