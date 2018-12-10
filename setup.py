@@ -2,7 +2,7 @@
 
 from setuptools import setup, find_packages
 
-version = '0.0.1.dev0'
+version = '1.0.0.0'
 
 setup(name='gs05.base',
       version=version,
