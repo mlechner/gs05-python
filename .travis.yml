@@ -8,7 +8,6 @@ before_install:
 install:
   - cp config.ini.example config.ini
   - pip install --upgrade pip
-  - pip install .
 script:
-  - python schema.py
+  - ppi install .
 
