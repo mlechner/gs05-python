@@ -69,3 +69,9 @@ pass=pass
     pip install .
     python schema.py # to create sqlite DB
     python run.py
+
+## TODOS
+* rework lcddriver to be used as module/package
+* separate display functionality from main run()
+* add more getter functions to class Records
+
