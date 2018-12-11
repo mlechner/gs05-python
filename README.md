@@ -74,4 +74,4 @@ pass=pass
 * separate display functionality from main run()
 * add more getter functions to class Records
 * add Tests
-
+* use exact polling interval instead of time.sleep 
