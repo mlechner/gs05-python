@@ -9,8 +9,8 @@ from sqlalchemy.exc import SQLAlchemyError
 from db import get_dbengine
 from Record import Record
 from Config import Config
+from Lcd import Lcd
 import lcd_I2C.lib.lcddriver as lcddriver
-from lcd_I2C.lib.lcddriver import LCD_RETURNHOME
 
 
 class GS05App:
@@ -31,12 +31,12 @@ class GS05App:
             stopbits=int(self.serconf['stopbits']),
             timeout=int(self.serconf['timeout'])
         )
+        self.lines = None
         self.now = datetime.datetime.now()
         # on initialise lcd
         self.lcd = None
         if bool('lcd' in self.lcdconf and self.lcdconf['lcd'] and self.lcdconf['lcd'] != '0'):
-            self.lcd = lcddriver.lcd()
-            self.lcd.lcd_clear()
+            self.lcd = Lcd()
         else:
             print("no LCD found in config")
         self.Session = sessionmaker(bind=get_dbengine())
@@ -52,10 +52,11 @@ class GS05App:
                 record = self.save_record()
                 if self.lcd:
                     self.display_record(record)
+                    # FIXME
+                    #self.lcd.display_record(record, self)
             else:
                 print("lines differ or no lines fetched!")
             time.sleep(float(self.pollconf['waittime']) - ((time.time() - start) % float(int(self.pollconf['waittime']))))
-
 
     def ser_write(self):
         self.ser.write(self.serconf['receivekey'].encode('ascii'))
@@ -84,11 +85,13 @@ class GS05App:
             session.rollback()
             print("An error occured.")
 
+    # FIXME move this function to Lcd.py
     def display_record(self, record):
         try:
             if self.timestampout:
                 self.lcd.lcd_display_string((self.now.strftime("%d.%m.%y %H:%M")).ljust(16), self.timestampout)
-                self.lcd.lcd_write(LCD_RETURNHOME)
+                self.lcd.lcd_write(lcddriver.LCD_RETURNHOME)
+                self.lcd.lcd_write(lcddriver.LCD_BLINKOFF)
             if self.deviceid:
                 self.lcd.lcd_display_string(("%(id)s:%(ld)s|%(hd)s|%(echo)s" % ({
                     "id": record.deviceid,
@@ -99,7 +102,8 @@ class GS05App:
                 self.lcd.lcd_display_string(("ld %(ld)s | hd %(hd)s" % ({
                     "ld": record.lowdose,
                     "hd": record.highdose})).ljust(16), self.valueout)
-            self.lcd.lcd_write(LCD_RETURNHOME)
+            self.lcd.lcd_write(lcddriver.LCD_RETURNHOME)
+            self.lcd.lcd_write(lcddriver.LCD_BLINKOFF)
         except RuntimeError:
             print("Runtime Error: Could not write to LCD.")
 
