@@ -9,5 +9,5 @@ install:
   - cp config.ini.example config.ini
   - pip install --upgrade pip
 script:
-  - ppi install .
+  - pip install .
 
