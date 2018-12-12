@@ -5,14 +5,19 @@ from sqlalchemy import create_engine
 
 def get_dbengine():
     dbconfig=Config().get_config()['db']
-    if dbconfig['driver'] == 'sqlite':
-        engine = create_engine(dbconfig['sqlite'])
-    elif dbconfig['driver'] == 'postgresql':
-        engine = create_engine('postgresql://' + dbconfig['user'] + ':'
-                             + dbconfig['pass'] + '@' + dbconfig['host']
-                             + '/' + dbconfig['database'])
-    # use local sqlite as fallback
+    if dbconfig['driver'] == 'postgresql':
+        proto = 'postgresql://'
+    elif dbconfig['driver'] == 'mysql':
+        proto = 'mysql://'
     else:
-        engine = create_engine('sqlite:///gs05.sqlite')
+        proto = 'sqlite:///'
+    if dbconfig['driver'] in ('mysql', 'postgresql'):
+        engine = create_engine(proto + dbconfig['user'] + ':'
+                               + dbconfig['pass'] + '@' + dbconfig['host'] + ':'
+                               + dbconfig['port'] + '/' + dbconfig['database'])
+    elif dbconfig['driver'] == 'sqlite':
+        engine = create_engine(proto + dbconfig['sqlite'])
+    # use local gs05.sqlite as fallback
+    else:
+        engine = create_engine(proto + 'gs05.sqlite')
     return engine
-
