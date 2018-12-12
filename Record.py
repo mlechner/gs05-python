@@ -2,6 +2,7 @@
 
 from sqlalchemy import (Column, Integer, Boolean, Float, String, DateTime)
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 Base = declarative_base()
 from db import get_dbengine
 engine = get_dbengine()
@@ -36,6 +37,14 @@ class Record(Base):
         self.coincidence = bool(int(split_data["K"]))
         self.highvoltage = bool(int(split_data["S"]))
         self.temperature = float(str(bittemp[0]) + str(int(bittemp[1], 16)) + '.' + str((int(bittemp[2], 16)*100)/256))
+
+    def get_record_byid(self, id):
+        session = sessionmaker(bind=engine)
+        return session().query(Record).filter(Record.id==id).all()
+
+    def get_lowdose_threshold(self, threshold):
+        session = sessionmaker(bind=engine)
+        return session().query(Record).filter(Record.lowdose>threshold).all()
 
 
 Base.metadata.create_all(engine, checkfirst=True)
