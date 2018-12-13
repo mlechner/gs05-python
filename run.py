@@ -57,8 +57,6 @@ class GS05App:
             print(self.now)
             if self.check_lines():
                 record = self.save_record()
-                # FIXME
-                print(Record.get_lowdose_threshold(180))
                 if self.lcd:
                     self.lcd.display_record(record, this=self)
             else:
