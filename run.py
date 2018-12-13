@@ -3,44 +3,48 @@
 
 import time
 import datetime
-import serial
-from serial.serialutil import SerialException
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import SQLAlchemyError
 from db import get_dbengine
 from Record import Record
 from Config import Config
+from serial import Serial
+from serial import SerialException
 from Lcd import Lcd
 
 
 class GS05App:
     def __init__(self, *args, **kwargs):
         self.config = Config().get_config()
-        self.serconf = self.config['serial']
+        self.serialconf = self.config['serial']
         self.pollconf = self.config['polling']
         self.dbconf = self.config['db']
         self.lcdconf = self.config['lcd']
-        self.deviceid = self.serconf['deviceid'] if 'deviceid' in self.serconf else None
+        self.deviceid = self.serialconf['deviceid'] if 'deviceid' in self.serialconf else None
         self.valueout = int(self.lcdconf['valueout']) if 'valueout' in self.lcdconf else 2
         self.timestampout = int(self.lcdconf['timestamp']) if 'timestamp' in self.lcdconf and bool(self.lcdconf['timestamp']) else False
-        try:
-            self.ser = serial.Serial(
-                self.serconf['device'],
-                baudrate=int(self.serconf['baudrate']),
-                bytesize=int(self.serconf['bytesize']),
-                parity=self.serconf['parity'],
-                stopbits=int(self.serconf['stopbits']),
-                timeout=int(self.serconf['timeout'])
-            )
-        except SerialException as se:
-            print(se)
+        if bool('serial' in self.config and self.serialconf['device']):
+            try:
+                # FIXME
+                self.serial = Serial(
+                    self.serialconf['device'],
+                    baudrate=int(self.serialconf['baudrate']),
+                    bytesize=int(self.serialconf['bytesize']),
+                    parity=self.serialconf['parity'],
+                    stopbits=int(self.serialconf['stopbits']),
+                    timeout=int(self.serialconf['timeout'])
+                )
+            except SerialException as se:
+                print(se)
+        else:
+            self.serial = None
         self.lines = None
         self.now = datetime.datetime.now()
         # on initialise lcd
-        self.lcd = None
         if bool('lcd' in self.lcdconf and self.lcdconf['lcd'] and self.lcdconf['lcd'] != '0'):
             self.lcd = Lcd()
         else:
+            self.lcd = None
             print("no LCD found in config")
         self.Session = sessionmaker(bind=get_dbengine())
 
@@ -53,6 +57,7 @@ class GS05App:
             print(self.now)
             if self.check_lines():
                 record = self.save_record()
+                # FIXME
                 print(Record.get_lowdose_threshold(180))
                 if self.lcd:
                     self.lcd.display_record(record, this=self)
@@ -62,7 +67,7 @@ class GS05App:
 
     def ser_write(self):
         try:
-            self.ser.write(self.serconf['receivekey'].encode('ascii'))
+            self.serial.write(self.serialconf['receivekey'].encode('ascii'))
         except SerialException as se:
             print(se)
         except AttributeError as ae:
@@ -72,7 +77,7 @@ class GS05App:
         self.lines = []
         try:
             for i in range(int(self.pollconf['repeat'])):
-                self.lines.append(self.ser.readline())
+                self.lines.append(self.serial.readline())
             print(self.lines)
         except SerialException as se:
             print(se)
