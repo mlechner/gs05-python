@@ -25,7 +25,6 @@ class GS05App:
         self.timestampout = int(self.lcdconf['timestamp']) if 'timestamp' in self.lcdconf and bool(self.lcdconf['timestamp']) else False
         if bool('serial' in self.config and self.serialconf['device']):
             try:
-                # FIXME
                 self.serial = Serial(
                     self.serialconf['device'],
                     baudrate=int(self.serialconf['baudrate']),
@@ -83,8 +82,8 @@ class GS05App:
             print(ae)
 
     def check_lines(self):
-        if self.lines:
-            return (len(self.lines) > 0) and (self.lines[1:] == self.lines[:-1])
+        if (self.lines):
+            return (len(self.lines) > 0) and  self.lines[0] != '' and (self.lines[1:] == self.lines[:-1])
 
     def save_record(self):
         session = self.Session()
