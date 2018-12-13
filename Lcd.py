@@ -15,7 +15,7 @@ class Lcd:
                     self.lcd.lcd_display_string((this.now.strftime("%d.%m.%y %H:%M")).ljust(16), this.timestampout)
                     self.lcd.lcd_write(lcddriver.LCD_RETURNHOME)
                     self.lcd.lcd_write(lcddriver.LCD_BLINKOFF)
-                if self.deviceid:
+                if this.deviceid:
                     self.lcd.lcd_display_string(("%(id)s:%(ld)s|%(hd)s|%(echo)s" % ({
                         "id": record.deviceid,
                         "ld": record.lowdose,
