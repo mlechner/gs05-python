@@ -88,11 +88,11 @@ class GS05App:
         if self.lines:
             return (len(self.lines) > 0) and (self.lines[1:] == self.lines[:-1])
 
-    def save_record(self, lines):
+    def save_record(self):
         session = self.Session()
         try:
             myrecord = Record()
-            myrecord.set_data_from_recordstring(lines[0])
+            myrecord.set_data_from_recordstring(self.lines[0])
             myrecord.deviceid = self.deviceid
             myrecord.created = self.now
             session.add(myrecord)
