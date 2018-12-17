@@ -8,6 +8,26 @@ timeout=1
 receivekey=D
 deviceid=1234T
 
+[probe]
+id=01234Q
+typ=5
+eigen_nd=1
+empf_nd=1000.0
+totzeit_nd=0.0000050
+korr1_nd=-0.00000500
+korr2_nd=0.00000000001000
+korr3_nd=-2.900e-17
+korr4_nd=2.400e-23
+ueberlapp_nd=20
+eigen_hd=0.1
+empf_hd=1.250
+totzeit_hd=0.00000050
+korr1_hd=0.0000005
+korr2_hd=0
+korr3_hd=0
+korr4_hd=0
+ueberlapp_hd=100
+
 [lcd]
 lcd=1
 valueout=2
