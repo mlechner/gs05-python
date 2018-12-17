@@ -17,10 +17,11 @@ class GS05App:
     def __init__(self, *args, **kwargs):
         self.config = Config().get_config()
         self.serialconf = self.config['serial']
+        self.probeconf = self.config['probe']
         self.pollconf = self.config['polling']
         self.dbconf = self.config['db']
         self.lcdconf = self.config['lcd']
-        self.deviceid = self.serialconf['deviceid'] if 'deviceid' in self.serialconf else None
+        self.deviceid = self.probeconf['id'] if 'id' in self.probeconf else None
         self.valueout = int(self.lcdconf['valueout']) if 'valueout' in self.lcdconf else 2
         self.timestampout = int(self.lcdconf['timestamp']) if 'timestamp' in self.lcdconf and bool(self.lcdconf['timestamp']) else False
         if bool('serial' in self.config and self.serialconf['device']):

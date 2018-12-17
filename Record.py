@@ -46,5 +46,8 @@ class Record(Base):
         session = sessionmaker(bind=engine)
         return session().query(Record).filter(Record.lowdose>threshold).all()
 
+    def get_odl(self):
+        nob = 1
+
 
 Base.metadata.create_all(engine, checkfirst=True)
