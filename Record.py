@@ -3,8 +3,10 @@
 from sqlalchemy import (Column, Integer, Boolean, Float, String, DateTime)
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-Base = declarative_base()
 from db import get_dbengine
+
+
+Base = declarative_base()
 engine = get_dbengine()
 
 class Record(Base):
@@ -40,14 +42,11 @@ class Record(Base):
 
     def get_record_byid(self, id):
         session = sessionmaker(bind=engine)
-        return session().query(Record).filter(Record.id==id).all()
+        return session().query(Record).filter(Record.id == id).all()
 
     def get_lowdose_threshold(self, threshold):
         session = sessionmaker(bind=engine)
         return session().query(Record).filter(Record.lowdose>threshold).all()
-
-    def get_odl(self):
-        nob = 1
 
 
 Base.metadata.create_all(engine, checkfirst=True)

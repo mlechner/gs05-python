@@ -3,8 +3,9 @@
 from Config import Config
 from sqlalchemy import create_engine
 
+
 def get_dbengine():
-    dbconfig=Config().get_config()['db']
+    dbconfig = Config().get_config()['db']
     if dbconfig['driver'] == 'postgresql':
         proto = 'postgresql://'
     elif dbconfig['driver'] == 'mysql':

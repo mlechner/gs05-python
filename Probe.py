@@ -3,15 +3,14 @@
 from sqlalchemy import (Column, Integer, Float, String, DateTime)
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-
-Base = declarative_base()
 from db import get_dbengine
 
+Base = declarative_base()
 engine = get_dbengine()
 
 
 class Probe(Base):
-    __tablename__ = 'records'
+    __tablename__ = 'probes'
     id = Column(String, primary_key=True)
     typ = Column(Integer)
     eigen_nd = Column(Integer)
@@ -36,8 +35,14 @@ class Probe(Base):
         return "%(id)s:%(typ)s|%(created)s" % ({"id": self.id, "typ": self.typ, "created": self.created})
 
     def set_probe_from_probeconf(self, probeconf):
-        # FIXME
-        pass
+        for key in probeconf:
+            keytype = self.__table__.c[key].type
+            if isinstance(keytype, Float):
+                setattr(self, key, float(probeconf[key]))
+            elif isinstance(keytype, Integer):
+                setattr(self, key, int(probeconf[key]))
+            elif isinstance(keytype, String):
+                setattr(self, key, str(probeconf[key]))
 
     def get_probes_byid(self, id):
         session = sessionmaker(bind=engine)
