@@ -3,9 +3,12 @@
 from sqlalchemy import (Column, Integer, Float, String, DateTime)
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+
 Base = declarative_base()
 from db import get_dbengine
+
 engine = get_dbengine()
+
 
 class Probe(Base):
     __tablename__ = 'records'
@@ -38,24 +41,30 @@ class Probe(Base):
 
     def get_probes_byid(self, id):
         session = sessionmaker(bind=engine)
-        return session().query(Probe).filter(Probe.id==id).all()
+        return session().query(Probe).filter(Probe.id == id).all()
 
     def get_latest_probe_byid(self, id):
         session = sessionmaker(bind=engine)
-        return session().query(Probe).filter(Probe.id==id).order_by(Probe.created.desc()).first()
+        return session().query(Probe).filter(Probe.id == id).order_by(Probe.created.desc()).first()
 
     # FIXME - work in progress
     @property
     def nob(self):
-        return 1/self.totzeit_nd
+        return 1 / self.totzeit_nd
 
     # FIXME - work in progress - sure that this is still wrong
+    # better to take this as function in Record class, because Probe is almost static here?
     def get_odl(self, count):
         if count > self.eigen_hd:
             diff = count - self.eigen_hd
             if count > self.nob:
                 count = self.nob
-            odl = diff / (self.empf_hd * (1.0 - self.korr1_hd * count + self.korr2_hd * count * count - self.korr3_hd * count * count * count + self.korr4_hd * count * count * count * count))
+            odl = diff / (self.empf_hd * (1.0
+                                          - self.korr1_hd * count
+                                          + self.korr2_hd * count ** 2
+                                          - self.korr3_hd * count ** 3
+                                          + self.korr4_hd * count ** 4)
+                          )
         return odl
 
 
