@@ -2,7 +2,13 @@
 
 from setuptools import setup, find_packages
 
-version = '1.0.1.dev0'
+version = '1.0.1.dev1'
+
+extras = {
+    'with_temp2': ['lk-temp2'],
+    'with_lcd': ['lcd_I2C'],
+    'with_postgresql': ['psycoppg2-binary'],
+}
 
 setup(name='gs05.base',
       version=version,
@@ -27,9 +33,9 @@ setup(name='gs05.base',
           'configparser',
           'setuptools',
           'pyserial',
-          'SQLAlchemy',
-          'psycopg2-binary'
+          'SQLAlchemy'
       ],
+      extras_require=extras,
       ##code-section entrypoints      
       entry_points="""
       # -*- Entry points: -*-

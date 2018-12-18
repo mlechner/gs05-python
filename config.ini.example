@@ -6,7 +6,6 @@ parity=N
 stopbits=1
 timeout=1
 receivekey=D
-deviceid=1234T
 
 [probe]
 id=01234Q

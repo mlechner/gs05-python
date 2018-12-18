@@ -8,11 +8,12 @@
 * Raspberry Pi Model B
 * RS485:
   * DIGITUS USB - Seriell Adapter (RS485) DA-70157 or
-  * JOY-IT Raspberry Pi Shield (RS485 )  RB-RS485
+  * JOY-iT Raspberry Pi Shield (RS485 )  RB-RS485
 * GS05 QIS ODL-devices of the german Federal Office for Radiation Protection
   * https://odlinfo.bfs.de/DE/themen/wie-wird-gemessen/odl-sonde.html
   * https://odlinfo.bfs.de/DE/themen/wie-wird-gemessen/interpretation.html
-* optional Display: JOY-IT SBC-LCD16X2
+* optional Display: JOY-iT SBC-LCD16X2
+* optional: Temperatur-Sensor: JOY-iT LinkerKit Temp2 (http://www.linkerkit.de/index.php?title=LK-Temp2)
 ## configuration
 Copy config.ini.example to config.ini to have a initial configuration.
 ### Section [serial]
@@ -70,8 +71,8 @@ pass=pass
     python run.py
 
 ## TODOS
-* rework lcddriver to be used as module/package
-* separate display functionality from main run()
 * add more getter functions to class Records
 * add Tests
-* use exact polling interval instead of time.sleep 
+* add package dependencies for optional functionalities
+  * lcd
+  * lk-temp2  
