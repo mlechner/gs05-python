@@ -49,22 +49,50 @@ class Probe(Base):
 
     # FIXME - work in progress
     @property
-    def nob(self):
+    def nob_nd(self):
         return 1 / self.totzeit_nd
+
+    @property
+    def nob_hd(self):
+        return 1 / self.totzeit_hd
+
 
     # FIXME - work in progress - sure that this is still wrong
     # better to take this as function in Record class, because Probe is almost static here?
-    def get_odl(self, count):
+    @property
+    def get_odl_nd(self, count):
+        if count > self.eigen_nd:
+            diff = count - self.eigen_nd
+            if count > self.nob_nd:
+                count = self.nob_nd
+            odl = diff / (self.empf_nd * (1.0
+                                          - self.korr1_nd * count
+                                          + self.korr2_nd * count ** 2
+                                          - self.korr3_nd * count ** 3
+                                          + self.korr4_nd * count ** 4)
+                          )
+        return odl
+
+    @property
+    def get_odl_hd(self, count):
         if count > self.eigen_hd:
             diff = count - self.eigen_hd
-            if count > self.nob:
-                count = self.nob
+            if count > self.nob_hd:
+                count = self.nob_hd
             odl = diff / (self.empf_hd * (1.0
                                           - self.korr1_hd * count
                                           + self.korr2_hd * count ** 2
                                           - self.korr3_hd * count ** 3
                                           + self.korr4_hd * count ** 4)
                           )
+        return odl
+
+    # should use weighted odl_nd and odl_hd in overlapping!!
+    # ignore hd in the meanwhile
+    @property
+    def get_odl(self):
+        odl = self.get_odl_nd
+        # odl = self.get_odl_nd + self.get_odl_hd
         return odl
 
 
