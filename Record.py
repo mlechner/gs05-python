@@ -4,6 +4,7 @@ from sqlalchemy import (Column, Integer, Boolean, Float, String, DateTime)
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from db import get_dbengine
+from Probe import Probe
 
 
 Base = declarative_base()
@@ -47,6 +48,19 @@ class Record(Base):
     def get_lowdose_threshold(self, threshold):
         session = sessionmaker(bind=engine)
         return session().query(Record).filter(Record.lowdose>threshold).all()
+
+    @property
+    def get_odl_nd(self, this):
+        this.probe.get_odl_nd(self.lowdose)
+
+    @property
+    def get_odl_hd(self, this):
+        this.probe.get_odl_nd(self.highdose)
+
+    @property
+    def get_odl(self, this):
+        this.probe.get_odl(self.lowdose, self.highdose)
+
 
 
 Base.metadata.create_all(engine, checkfirst=True)

@@ -95,9 +95,9 @@ class Probe(Base):
     # should use weighted odl_nd and odl_hd in overlapping!!
     # ignore hd in the meanwhile
     @property
-    def get_odl(self):
-        odl = self.get_odl_nd
-        # odl = self.get_odl_nd + self.get_odl_hd
+    def get_odl(self, count_ld, count_hd):
+        odl = self.get_odl_nd(count_ld)
+        # odl = self.get_odl_nd(count_ld) + self.get_odl_hd(count_hd)
         return odl
 
 
