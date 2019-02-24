@@ -3,7 +3,10 @@
 ## dependencies
 * python
 * python-virtualenv
+* libpq-dev (postgresql developer libs)
 * libffi-dev (for lcd display support)
+## recommended
+* i2c-tools (for lcd display support)
 ## used hardware
 * Raspberry Pi Model B
 * RS485:
