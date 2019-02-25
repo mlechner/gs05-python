@@ -28,7 +28,7 @@
 Copy config.ini.example to config.ini to have a initial configuration.
 ### Section [serial]
 #### device=
-Device the probe is cionnected to. E.g. /dev/ttyAMA0 or /dev/ttyUSB0
+Device the probe is connected to. E.g. /dev/ttyS0 or /dev/ttyAMA0 (for Pi Shield RS485) or /dev/ttyUSB0 (for USB-Adapter)
 #### serial parameters
 baudrate=9600  
 bytesize=8  
