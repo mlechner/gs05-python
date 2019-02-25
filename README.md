@@ -1,22 +1,29 @@
 # gs05-python
 (still work in progress)
 ## dependencies
+### obligatory
 * python
 * python-virtualenv
 * libpq-dev (postgresql developer libs)
+### mandatory if using Raspberry Pi Shield (RS485)  RB-RS485
+* python-serial (if using Pi Shield)
+* wiringpi (if using Pi Shield)
+### optional packages
 * libffi-dev (for lcd display support)
-## recommended
+### recommended
 * i2c-tools (for lcd display support)
+
 ## used hardware
 * Raspberry Pi Model B
 * RS485:
   * DIGITUS USB - Seriell Adapter (RS485) DA-70157 or
-  * JOY-iT Raspberry Pi Shield (RS485 )  RB-RS485
+  * JOY-iT Raspberry Pi Shield (RS485)  RB-RS485
 * GS05 QIS ODL-devices of the german Federal Office for Radiation Protection
   * https://odlinfo.bfs.de/DE/themen/wie-wird-gemessen/odl-sonde.html
   * https://odlinfo.bfs.de/DE/themen/wie-wird-gemessen/interpretation.html
 * optional Display: JOY-iT SBC-LCD16X2
 * optional: Temperatur-Sensor: JOY-iT LinkerKit Temp2 (http://www.linkerkit.de/index.php?title=LK-Temp2)
+
 ## configuration
 Copy config.ini.example to config.ini to have a initial configuration.
 ### Section [serial]
